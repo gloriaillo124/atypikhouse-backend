@@ -7,8 +7,32 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+
+class UserController extends AbstractController
+{
+    public function register(Request $request, UserPasswordHasherInterface $passwordHasher)
+    {
+        // ...
+
+        $user = new User();
+        $hashedPassword = $passwordHasher->hashPassword(
+            $user,
+            $request->request->get('password')
+        );
+
+        $user->setPassword($hashedPassword);
+
+        // ...
+
+        return $this->redirectToRoute('login');
+    }
+}
+
 class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -115,6 +139,7 @@ class User implements PasswordAuthenticatedUserInterface
 
     public function getUsername(): ?string
     {
+        
         return $this->username;
     }
 

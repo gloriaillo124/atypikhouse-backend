@@ -76,8 +76,7 @@ class WebsiteController extends AbstractController
         if (!isset($data->destinationId, $data->hebergementId, $data->nbPersonne))
             return $this->globals->error(ErrorHttp::FORM_ERROR);
 
-        $logement = $this->logementRepository->findOneBy(['fk_categorie_destination'=>$data->destinationId, 'fk_categorie_hebergement'=>$data->hebergementId, 'capaciteAccueil'=>$data->nbPersonne]);
-       
+        $logement = $this->logementRepository->findOneBy(['fk_categorie_destination'=>$data->destinationId, 'fk_categorie_hebergement'=>$data->hebergementId]);
         return $this->globals->success(
             $logement?->toArray()
         );

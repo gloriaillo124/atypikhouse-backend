@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Validator\Constraints\Regex;
 
 #[Route('api/security')]
 class SecurityController extends AbstractController
@@ -29,12 +30,14 @@ class SecurityController extends AbstractController
     #[Route('/login', name: 'login', methods: 'POST')]
     public function login(): JsonResponse
     {
+      
         $data = $this->globals->jsondecode();
 
         if (!isset($data->email, $data->password) || ($data->email === "" || $data->password === ""))
             return $this->globals->error(ErrorHttp::FORM_ERROR);
 
         $user = $this->userRepository->findOneBy(['email'=>$data->email]);
+
 
         //print("user");
 
@@ -46,6 +49,8 @@ class SecurityController extends AbstractController
 
         if (!$this->globals->hasher()->isPasswordValid($user, $data->password))
             return $this->globals->error(ErrorHttp::PASSWORD_ERROR);
+
+           
 
         return $this->globals->success($user->toArray(),"Vous êtes connecté");
     }

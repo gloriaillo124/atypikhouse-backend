@@ -71,7 +71,21 @@ class LogementController extends AbstractController
         $data = $this->globals->jsondecode();
 
         //Verification des inputs reçu
-        if (!isset($data->libelle,$data->montant,$data->description,$data->capaciteAccueil,$data->disponible,$data->nombrePiece,$data->nombreChambre,$data->categorie_hebergement,$data->categorie_destination,$data->categorie_inspiration,$data->userId,$data->enableCodepromo,$data->pourcentage))
+        if (!isset(
+        $data->libelle,
+        $data->montant,
+        $data->description,
+        $data->capaciteAccueil,
+        $data->disponible,
+        $data->nombrePiece,
+        $data->nombreChambre,
+        $data->categorie_hebergement,
+        $data->categorie_destination,
+        $data->categorie_inspiration,
+        $data->userId,
+        $data->enableCodepromo,
+        $data->pourcentage))
+        
             return $this->globals->error(ErrorHttp::FORM_ERROR);
 
         $logementExist = $this->logementRepository->findOneBy(['libelle'=>$data->libelle]);
